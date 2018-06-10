@@ -1,0 +1,489 @@
+\documentclass[fleqn]{article}
+\usepackage[top=30truemm,bottom=25truemm,left=25truemm,right=25truemm]{geometry}
+\usepackage{color}
+\usepackage{amsmath, amssymb}
+
+\usepackage[dvipdfmx,hiresbb]{graphicx}
+\usepackage{float}
+\usepackage{here}
+\usepackage[english]{babel}
+\usepackage{bm}
+
+\usepackage{latexsym}
+
+\title{Non-Bayesian Time-Varying Vector Autoregressive Model}
+\date{\today}
+\author{Ryoga Kobayashi}
+\begin{document}
+
+\maketitle
+
+\begin{align*}
+    \bm y_t = \bm \nu + \Phi^{(1)}_{t} \bm y_{t-1} + \cdots + \bm \Phi^{(p)}_{t} \bm y_{t-p} + \bm \epsilon_t, \qquad t = p+1, \dots, T,
+\end{align*}
+where
+\begin{align*}
+    & \underbrace{\bm y_t}_{d \times 1} = \begin{pmatrix}
+        y_{1, t} \\
+        \vdots \\
+        y_{d, t}
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \nu}_{d \times 1} = \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \epsilon_t}_{d \times 1} = \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \Phi^{(l)}_t}_{d \times d} = \begin{pmatrix}
+        \phi^{(l)}_{11, t} & \cdots & \phi^{(l)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \phi^{(l)}_{d1, t} & \cdots & \phi^{(l)}_{dd, t}
+    \end{pmatrix},
+    \qquad
+    l = 1, \dots, p.
+\end{align*}
+
+We can notate as
+\begin{align*}
+    \begin{pmatrix}
+        y_{1, t} \\
+        \vdots \\
+        y_{d, t}
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \phi^{(1)}_{11, t} & \cdots & \phi^{(1)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t}
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-1}
+    \end{pmatrix}
+    + \cdots +
+    \begin{pmatrix}
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \phi^{(p)}_{d1, t} & \cdots & \phi^{(p)}_{dd, t}
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-p} \\
+        \vdots \\
+        y_{d, t-p}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix} \\
+    & =
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \phi^{(1)}_{11, t} & \cdots & \phi^{(1)}_{1d, t}
+        & \cdots &
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots
+        & \cdots &
+        \vdots & \ddots & \vdots \\
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t}
+        & \cdots &
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t} \\
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+        \vdots \\
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix}.
+\end{align*}
+
+Thus, we can write
+\begin{align*}
+    \bm y_t = \bm \nu + \bm \Phi_t \bm Z_t + \bm \epsilon_t,
+\end{align*}
+where
+\begin{align*}
+    \underbrace{\bm \Phi_t}_{d \times dp} = \begin{pmatrix}
+        \phi^{(1)}_{11, t} & \cdots & \phi^{(1)}_{1d, t}
+        & \cdots &
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots
+        & \cdots &
+        \vdots & \ddots & \vdots \\
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t}
+        & \cdots &
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t} \\
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm Z_t}_{dp \times 1} = \begin{pmatrix}
+        \bm y_{t-1} \\
+        \vdots \\
+        \bm y_{t-p}
+    \end{pmatrix}
+    = \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-1} \\
+        \vdots \\
+        y_{1, t-p} \\
+        \vdots \\
+        y_{d, t-p}
+    \end{pmatrix}.
+\end{align*}
+
+we can calculate
+\begin{align*}
+    \begin{pmatrix}
+        y_{1, t} \\
+        \vdots \\
+        y_{d, t}
+    \end{pmatrix}
+    & =
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \phi^{(1)}_{11, t} & \cdots & \phi^{(1)}_{1d, t}
+        & \cdots &
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots
+        & \cdots &
+        \vdots & \ddots & \vdots \\
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t}
+        & \cdots &
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t} \\
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+        \vdots \\
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix} \\
+    &= \begin{pmatrix}
+        1 & & \\
+        & \ddots & \\
+        & & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix}
+    + \begin{pmatrix}
+        y_{1, t-1} &        &            & \cdots & y_{d, t-1} &        &            \\
+                   & \ddots &            & \cdots &            & \ddots &            \\
+                   &        & y_{1, t-p} & \cdots &            &        & y_{d, t-p}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d \\
+        \phi^{(1)}_{11, t} \\
+        \vdots \\
+        \phi^{(1)}_{d1, t} \\
+        \vdots \\
+        \phi^{(p)}_{d1, t} \\
+        \vdots \\
+        \phi^{(p)}_{dd, t}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix}
+\end{align*}
+
+Therefore we can notate
+\begin{align*}
+    \bm y_t = \begin{pmatrix}
+        \bm I_d & \bm Z_t' \otimes \bm I_d
+    \end{pmatrix}
+    \begin{pmatrix}
+        \bm \nu \\
+        \operatorname{vec}(\bm \Phi_t)
+    \end{pmatrix}
+\end{align*}
+
+We can write
+\begin{align*}
+    \begin{pmatrix}
+        \bm y_{p+1} \\
+        \vdots \\
+        \bm y_T
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \bm I_d & \bm Z_{p+1}' \otimes \bm I_d &        &                                 \\
+        \vdots  &                                 & \ddots &                              \\
+        \bm I_d &                                 &        & \bm Z_{T}' \otimes \bm I_d
+    \end{pmatrix}
+    \begin{pmatrix}
+        \bm \nu \\
+        \operatorname{vec}(\bm \Phi_{p+1}) \\
+        \vdots \\
+        \operatorname{vec}(\bm \Phi_T)
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \epsilon_{p+1} \\
+        \vdots \\
+        \bm \epsilon_T
+    \end{pmatrix}
+\end{align*}
+
+Our model can be rewritten as
+\begin{align*}
+    \bm Y = \bm Z \bm \beta + \bm \epsilon
+\end{align*}
+where
+\begin{align*}
+    \underbrace{\bm Y}_{d(T-p) \times 1} = \begin{pmatrix}
+        \bm y_{p+1} \\
+        \vdots \\
+        \bm y_T
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm Z}_{d(T-p) \times (d + d^2p(T-p))} =
+    \begin{pmatrix}
+        \bm I_d & \bm Z_{p+1}' \otimes \bm I_d &        &                            \\
+        \vdots  &                              & \ddots &                            \\
+        \bm I_d &                              &        & \bm Z_{T}' \otimes \bm I_d
+    \end{pmatrix}, \\
+\end{align*}
+and
+\begin{align*}
+    \underbrace{\bm \beta}_{(d + d^2p(T-p)) \times 1}
+    = \begin{pmatrix}
+        \bm \nu \\
+        \operatorname{vec}(\bm \Phi_{p+1}) \\
+        \vdots \\
+        \operatorname{vec}(\bm \Phi_{T})
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \epsilon}_{d(T-p) \times 1}
+    = \begin{pmatrix}
+        \bm \epsilon_{p+1} \\
+        \vdots \\
+        \bm \epsilon_T
+    \end{pmatrix}.
+\end{align*}
+
+Assume
+\begin{align*}
+    \phi^{(l)}_{ij, t} = \phi^{(l)}_{ij, t-1} + h^{(l)}_{ij, t},
+    \qquad i = 1, \dots, d,
+    \qquad j = 1, \dots, d,
+    \qquad l = 1, \dots, p,
+    \qquad t = p+1, \dots, T.
+\end{align*}
+
+Note that
+\begin{align*}
+    \bm \Phi_t = \bm \Phi_{t-1} + \bm H_t
+\end{align*}
+where
+\begin{align*}
+    \underbrace{\bm H_t}_{d \times dp} = \begin{pmatrix}
+        h^{(1)}_{11, t} & \cdots & h^{(1)}_{1d, t} & \cdots & h^{(p)}_{11, t} & \cdots & h^{(p)}_{1d, t} \\
+        \vdots          & \ddots & \vdots          & \cdots & \vdots          & \ddots & \vdots \\
+        h^{(1)}_{d1, t} & \cdots & h^{(1)}_{dd, t} & \cdots & h^{(p)}_{d1, t} & \cdots & h^{(p)}_{dd, t}
+    \end{pmatrix}.
+\end{align*}
+
+Define
+\begin{align*}
+    \underbrace{\bm \beta_t}_{d^2p \times 1} = \operatorname{vec}(\bm \Phi_t), \qquad \underbrace{\bm \eta_t}_{d^2p \times 1} = \operatorname{vec}(\bm H_t),
+\end{align*}
+then
+\begin{align*}
+    \bm \beta_t = \bm \beta_{t-1} + \bm \eta_t.
+\end{align*}
+
+We can calculate
+\begin{align*}
+    \begin{pmatrix}
+        \bm \beta_{p+1} \\
+        \vdots \\
+        \bm \beta_{T}
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        \bm \beta_p \\
+        \vdots \\
+        \bm \beta_{T-1}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix} \\
+    \begin{pmatrix}
+        \bm 0_{d^2p} \\
+        \vdots \\
+        \bm 0_{d^2p}
+    \end{pmatrix}
+    &= \begin{pmatrix}
+        \bm \beta_p - \bm \beta_{p+1} \\
+        \vdots \\
+        \bm \beta_{T-1} - \bm \beta_T
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix} \\
+    \begin{pmatrix}
+        - \bm \beta_p \\
+        \bm 0_{d^2p} \\
+        \vdots \\
+        \bm 0_{d^2p}
+    \end{pmatrix}
+    &= \begin{pmatrix}
+        - \bm \beta_{p+1} \\
+        \bm \beta_{p+1} - \bm \beta_{p+2} \\
+        \vdots \\
+        \bm \beta_{T-1} - \beta_{T}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix} \\
+    &= \begin{pmatrix}
+        - \bm I_{d^2p} &                &              &                \\
+          \bm I_{d^2p} & - \bm I_{d^2p} &              &                \\
+                       & \ddots         & \ddots       &                \\
+                       &                & \bm I_{d^2p} & - \bm I_{d^2p}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \bm \beta_{p+1} \\
+        \bm \beta_{p+2} \\
+        \vdots \\
+        \bm \beta_T
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix} \\
+    &= \begin{pmatrix}
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} & - \bm I_{d^2p} &                &              &                \\
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} &   \bm I_{d^2p} & - \bm I_{d^2p} &              &                \\
+        \vdots       & \cdots & \vdots       &                & \ddots         & \ddots       &                \\
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} &                &                & \bm I_{d^2p} & - \bm I_{d^2p}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \bm \nu \\
+        \bm \beta_{p+1} \\
+        \bm \beta_{p+2} \\
+        \vdots \\
+        \bm \beta_T
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix}.
+\end{align*}
+
+Thus, we can write
+\begin{align*}
+    \bm \Gamma = \bm W \bm \beta + \bm \eta
+\end{align*}
+where
+\begin{align*}
+    \underbrace{\bm \Gamma}_{d^2p(T-p)) \times 1} = \begin{pmatrix}
+        - \operatorname{vec}(\bm \Phi_p) \\
+        \bm 0_{d^2p} \\
+        \vdots \\
+        \bm 0_{d^2p}
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \eta}_{d^2p(T-p) \times 1} = \begin{pmatrix}
+        \bm \eta_{p+1} \\
+        \vdots \\
+        \bm \eta_T
+    \end{pmatrix},
+\end{align*}
+and
+\begin{align*}
+    \underbrace{\bm W}_{d^2pT \times (d+d^2p(T-p))} = \begin{pmatrix}
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} & - \bm I_{d^2p} &                &              &                \\
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} &   \bm I_{d^2p} & - \bm I_{d^2p} &              &                \\
+        \vdots       & \cdots & \vdots       &                & \ddots         & \ddots       &                \\
+        \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} &                &                & \bm I_{d^2p} & - \bm I_{d^2p}
+    \end{pmatrix}.
+\end{align*}
+
+Therefore, with all things considered, our model can be notated as
+\begin{align*}
+    \bm \psi = \bm \zeta \bm \beta + \bm \xi,
+\end{align*}
+where
+\begin{align*}
+    \underbrace{\bm \psi}_{(d(T-p)+d^2p(T-p)) \times 1} = \begin{pmatrix}
+        \bm Y \\
+        \bm \Gamma
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \zeta}_{(d(T-p) + d^2p)(T-p)) \times (d + d^2p(T-p))}
+    = \begin{pmatrix}
+        \bm Z \\
+        \bm W
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \xi}_{(d(T-p)+d^2p(T-p)) \times 1}
+    = \begin{pmatrix}
+        \bm \epsilon \\
+        \bm \eta
+    \end{pmatrix}.
+\end{align*}
+
+\end{document}
