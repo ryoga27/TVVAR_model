@@ -18,6 +18,8 @@
 
 \maketitle
 
+\section{Model}
+
 \begin{align*}
     \bm y_t = \bm \nu + \Phi^{(1)}_{t} \bm y_{t-1} + \cdots + \bm \Phi^{(p)}_{t} \bm y_{t-p} + \bm \epsilon_t, \qquad t = p+1, \dots, T,
 \end{align*}
@@ -484,6 +486,113 @@ where
         \bm \epsilon \\
         \bm \eta
     \end{pmatrix}.
+\end{align*}
+
+\section{Prediction}
+
+\begin{align*}
+    \hat{\bm y}_t = E[\bm y_t| \mathcal F_{t-1}] = E[\bm y_t| \bm y_{t-1}, \cdots, \bm y_{t-p}]
+\end{align*}
+
+\begin{align*}
+    \hat{\bm y}_t = \hat{\bm \nu} + \hat{\bm \Phi}^{(1)}_{t} \bm y_{t-1} + \cdots + \hat{\bm \Phi}^{(p)}_{t} \bm y_{t-p},
+\end{align*}
+where
+\begin{align*}
+    & \underbrace{\hat{\bm y}_t}_{d \times 1} = \begin{pmatrix}
+        \hat{y}_{1, t} \\
+        \vdots \\
+        \hat{y}_{d, t}
+    \end{pmatrix},
+    \qquad
+    \underbrace{\bm \nu}_{d \times 1} = \begin{pmatrix}
+        \hat{\nu}_1 \\
+        \vdots \\
+        \hat{\nu}_d
+    \end{pmatrix},
+    \qquad
+    \underbrace{\hat{\bm \Phi}^{(l)}_t}_{d \times d} = \begin{pmatrix}
+        \hat{\phi}^{(l)}_{11, t} & \cdots & \hat{\phi}^{(l)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \hat{\phi}^{(l)}_{d1, t} & \cdots & \hat{\phi}^{(l)}_{dd, t}
+    \end{pmatrix},
+    \qquad
+    l = 1, \dots, p.
+\end{align*}
+
+We can notate as
+\begin{align*}
+    \begin{pmatrix}
+        \hat{y}_{1, t} \\
+        \vdots \\
+        \hat{y}_{d, t}
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        \hat{\nu}_1 \\
+        \vdots \\
+        \hat{\nu}_d
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \hat{\phi}^{(1)}_{11, t} & \cdots & \hat{\phi}^{(1)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \hat{\phi}^{(1)}_{d1, t} & \cdots & \hat{\phi}^{(1)}_{dd, t}
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-1}
+    \end{pmatrix}
+    + \cdots +
+    \begin{pmatrix}
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots \\
+        \phi^{(p)}_{d1, t} & \cdots & \phi^{(p)}_{dd, t}
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-p} \\
+        \vdots \\
+        y_{d, t-p}
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \epsilon_{1, t} \\
+        \vdots \\
+        \epsilon_{d, t}
+    \end{pmatrix} \\
+    & =
+    \begin{pmatrix}
+        \nu_1 \\
+        \vdots \\
+        \nu_d
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        \phi^{(1)}_{11, t} & \cdots & \phi^{(1)}_{1d, t}
+        & \cdots &
+        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \vdots & \ddots & \vdots
+        & \cdots &
+        \vdots & \ddots & \vdots \\
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t}
+        & \cdots &
+        \phi^{(1)}_{d1, t} & \cdots & \phi^{(1)}_{dd, t} \\
+    \end{pmatrix}
+    \begin{pmatrix}
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+        \vdots \\
+        y_{1, t-1} \\
+        \vdots \\
+        y_{d, t-p} \\
+    \end{pmatrix}.
+\end{align*}
+
+Thus we can write
+\begin{align*}
+    \hat{\bm y}_t = \hat{\bm \nu} + \hat{\bm \Phi}_t \bm Z_t. 
 \end{align*}
 
 \end{document}
