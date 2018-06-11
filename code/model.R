@@ -94,6 +94,19 @@ make_Phi = function(beta, y, p){
     return(out)
 }
 
+make_beta = function(nu, Phi, y, p)}{
+    T = nrow(y)
+    d = ncol(y)
+    out = matrix(0, nrow = d + d^2*p*(T-p), ncol = 1)
+    out[1:d] = nu
+    for(t in 1:(T-p)){
+        for(j in 1:d){
+            out[1:d + d] = Phi[, j, t]
+        }
+    }
+    return(out)
+}
+
 TVVAR_model = function(y, p){
     Y = make_Y(y, p = p)
     Z = make_Z(y, p = p)
@@ -118,29 +131,9 @@ TVVAR_model_lasso = function(y, p, lambda){
     Gamma = make_Gamma(y, p = p)
     psi = rbind(Y, Gamma)
     zeta = rbind(Z, W)
-    beta = coef(glmnet(x = zeta, y = psi, intercept = FALSE, alpha = 1, lambda = lambda))
-    nu = make_nu(beta, y, p = p)
-    Phi = make_Phi(beta, y, p = p)
-    out = list(
-        nu = nu,
-        Phi = Phi
-    )
-    return(out)
-}
-
-# only p = 1 version
-TVVAR_model_cv_lasso = function(y, p, lambdas){
-    T = nrow(y)
-    d = ncol(y)
-    n_lambdas = length(lambdas)
-    for(i in 1:length(lambdas)){
-        Y = make_Y(y, p = p)
-        Z = make_Z(y, p = p)
-        W = make_W(y, p = p)
-        Gamma = make_Gamma(y, p = p)
-        psi = rbind(Y, Gamma)
-        zeta = rbind(Z, W)
-    beta = coef(glmnet(x = zeta, y = psi, intercept = FALSE, alpha = 1, lambda = lambda))
+    penalty_factor = rep(1, length(ncol(zeta)))
+    penalty_factor[1:d] = 0
+    beta = coef(glmnet(x = zeta, y = psi, intercept = FALSE, alpha = 1, lambda = lambda, penalty.factor = penalty_factor))
     nu = make_nu(beta, y, p = p)
     Phi = make_Phi(beta, y, p = p)
     out = list(
