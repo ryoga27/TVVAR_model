@@ -21,7 +21,7 @@
 \section{Model}
 
 \begin{align*}
-    \bm y_t = \bm \nu + \Phi^{(1)}_{t} \bm y_{t-1} + \cdots + \bm \Phi^{(p)}_{t} \bm y_{t-p} + \bm \epsilon_t, \qquad t = p+1, \dots, T,
+    \bm y_t = \bm \nu + \bm \Phi^{(1)}_{t} \bm y_{t-1} + \cdots + \bm \Phi^{(p)}_{t} \bm y_{t-p} + \bm \epsilon_t, \qquad t = p+1, \dots, T,
 \end{align*}
 where
 \begin{align*}
@@ -456,7 +456,7 @@ where
 \end{align*}
 and
 \begin{align*}
-    \underbrace{\bm W}_{d^2pT \times (d+d^2p(T-p))} = \begin{pmatrix}
+    \underbrace{\bm W}_{d^2p(T-p) \times (d+d^2p(T-p))} = \begin{pmatrix}
         \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} & - \bm I_{d^2p} &                &              &                \\
         \bm 0_{d^2p} & \cdots & \bm 0_{d^2p} &   \bm I_{d^2p} & - \bm I_{d^2p} &              &                \\
         \vdots       & \cdots & \vdots       &                & \ddots         & \ddots       &                \\
@@ -546,21 +546,15 @@ We can notate as
     \end{pmatrix}
     + \cdots +
     \begin{pmatrix}
-        \phi^{(p)}_{11, t} & \cdots & \phi^{(p)}_{1d, t} \\
+        \hat{\phi}^{(p)}_{11, t} & \cdots & \hat{\phi}^{(p)}_{1d, t} \\
         \vdots & \ddots & \vdots \\
-        \phi^{(p)}_{d1, t} & \cdots & \phi^{(p)}_{dd, t}
+        \hat{\phi}^{(p)}_{d1, t} & \cdots & \hat{\phi}^{(p)}_{dd, t}
     \end{pmatrix}
     \begin{pmatrix}
         y_{1, t-p} \\
         \vdots \\
         y_{d, t-p}
-    \end{pmatrix}
-    +
-    \begin{pmatrix}
-        \epsilon_{1, t} \\
-        \vdots \\
-        \epsilon_{d, t}
-    \end{pmatrix} \\
+    \end{pmatrix}\\
     & =
     \begin{pmatrix}
         \nu_1 \\
@@ -592,7 +586,7 @@ We can notate as
 
 Thus we can write
 \begin{align*}
-    \hat{\bm y}_t = \hat{\bm \nu} + \hat{\bm \Phi}_t \bm Z_t. 
+    \hat{\bm y}_t = \hat{\bm \nu} + \hat{\bm \Phi}_t \bm Z_t.
 \end{align*}
 
 \end{document}
