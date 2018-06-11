@@ -94,7 +94,7 @@ make_Phi = function(beta, y, p){
     return(out)
 }
 
-make_beta = function(nu, Phi, y, p)}{
+make_beta = function(nu, Phi, y, p){
     T = nrow(y)
     d = ncol(y)
     out = matrix(0, nrow = d + d^2*p*(T-p), ncol = 1)
