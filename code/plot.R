@@ -1,4 +1,5 @@
-plot_Phi = function(Phi){
+plot_Phi = function(result){
+    Phi = result$Phi
     T = dim(Phi)[3]
     d = dim(Phi)[1]
     out = matrix(0, nrow = T, ncol = d*d)
@@ -16,7 +17,7 @@ plot_Phi = function(Phi){
     for(s in 1:(d*d)){
         plot(1:T, out[, s], type = "n", ylim = ylim, ylab = "", xlab = "time")
         grid()
-        points(1:T, out[, s], type = "l", ylim = ylim)
+        points(1:T, out[, s], type = "l", ylim = ylim, lwd = 2)
         abline(h = 0)
     }
     par(mfrow = c(1, 1))
