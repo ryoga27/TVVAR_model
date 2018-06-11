@@ -1,3 +1,6 @@
+if(require("glmnet") == FALSE){
+    install.packages("glmnet")
+}
 library(glmnet)
 
 make_yt = function(y, t){
@@ -91,7 +94,7 @@ make_Phi = function(beta, y, p){
     return(out)
 }
 
-TVVAR_model = function(y, p = 1){
+TVVAR_model = function(y, p){
     Y = make_Y(y, p = p)
     Z = make_Z(y, p = p)
     W = make_W(y, p = p)
@@ -108,14 +111,36 @@ TVVAR_model = function(y, p = 1){
     return(out)
 }
 
-TVVAR_model_lasso = function(y, p = 1){
+TVVAR_model_lasso = function(y, p, lambda){
     Y = make_Y(y, p = p)
     Z = make_Z(y, p = p)
     W = make_W(y, p = p)
     Gamma = make_Gamma(y, p = p)
     psi = rbind(Y, Gamma)
     zeta = rbind(Z, W)
-    beta = coef(cv.glmnet(x = zeta, y = psi, alpha = 1))
+    beta = coef(glmnet(x = zeta, y = psi, intercept = FALSE, alpha = 1, lambda = lambda))
+    nu = make_nu(beta, y, p = p)
+    Phi = make_Phi(beta, y, p = p)
+    out = list(
+        nu = nu,
+        Phi = Phi
+    )
+    return(out)
+}
+
+# only p = 1 version
+TVVAR_model_cv_lasso = function(y, p, lambdas){
+    T = nrow(y)
+    d = ncol(y)
+    n_lambdas = length(lambdas)
+    for(i in 1:length(lambdas)){
+        Y = make_Y(y, p = p)
+        Z = make_Z(y, p = p)
+        W = make_W(y, p = p)
+        Gamma = make_Gamma(y, p = p)
+        psi = rbind(Y, Gamma)
+        zeta = rbind(Z, W)
+    beta = coef(glmnet(x = zeta, y = psi, intercept = FALSE, alpha = 1, lambda = lambda))
     nu = make_nu(beta, y, p = p)
     Phi = make_Phi(beta, y, p = p)
     out = list(

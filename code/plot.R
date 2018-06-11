@@ -1,5 +1,4 @@
-plot_Phi = function(result){
-    Phi = result$Phi
+plot_Phi = function(Phi){
     T = dim(Phi)[3]
     d = dim(Phi)[1]
     out = matrix(0, nrow = T, ncol = d*d)
