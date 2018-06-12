@@ -78,9 +78,8 @@ make_Zt = function(y, t, p){
     T = nrow(y)
     d = ncol(y)
     out = matrix(0, nrow = d*p, ncol = 1)
-    s = 1
     for(l in 1:p){
-        out[1:d + d*(s-1), ] = make_yt(y, t-l)
+        out[1:d + d*(l-1), ] = make_yt(y, t-l)
         s = s + 1
     }
     return(out)
@@ -114,7 +113,7 @@ make_Z = function(y, p){
     out = matrix(0, nrow = d*(T-p), ncol = d + d^2*p*(T-p))
     Id = diag(d)
     for(t in 1:(T-p)){
-        out[1:d + d*(t-1), 1:d] = Id
+        out[1:d + d*(t-p), 1:d] = Id
     }
     s = 1
     for(t in (p+1):T){
@@ -126,6 +125,25 @@ make_Z = function(y, p){
 
 ### sample code ###
 # T_test = 5
+# d_test = 2
+# p_test = 1
+#
+# y_test = matrix(0, nrow = T_test, ncol = d_test)
+# y_test[1:length(y_test)] = 1:length(y_test)
+# print(y_test)
+#
+# t_test = 3
+#
+# Zt_test = make_Zt(y = y_test, t = t_test, p = p_test)
+# print(Zt_test)
+#
+# Z_test = make_Z(y = y_test, p = p_test)
+# print(Z_test)
+# is.matrix(Z_test)
+# nrow(Z_test) == d_test*(T_test - p_test)
+# ncol(Z_test) == d_test + d_test^2*p_test*(T_test - p_test)
+#
+# T_test = 10
 # d_test = 2
 # p_test = 1
 #
