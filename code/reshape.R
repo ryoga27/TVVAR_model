@@ -78,6 +78,7 @@ make_Zt = function(y, t, p){
     T = nrow(y)
     d = ncol(y)
     out = matrix(0, nrow = d*p, ncol = 1)
+    s = 1
     for(l in 1:p){
         out[1:d + d*(s-1), ] = make_yt(y, t-l)
         s = s + 1
@@ -112,8 +113,8 @@ make_Z = function(y, p){
     d = ncol(y)
     out = matrix(0, nrow = d*(T-p), ncol = d + d^2*p*(T-p))
     Id = diag(d)
-    for(s in 1:(T-p)){
-        out[1:d + d*(s-1), 1:d] = Id
+    for(t in 1:(T-p)){
+        out[1:d + d*(t-1), 1:d] = Id
     }
     s = 1
     for(t in (p+1):T){
