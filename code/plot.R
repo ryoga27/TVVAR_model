@@ -35,7 +35,7 @@ plot_Phi = function(Phi, time = 1:dim(Phi)[3], time_label = time, ylim = NA){
 }
 
 
-plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA){
+plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA, legend = NA){
     T = dim(Phi[[1]])[3]
     d = dim(Phi[[1]])[1]
 
@@ -60,7 +60,6 @@ plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA){
         }
     }
 
-
     par(mfrow = c(d, d))
     if(is.na(sum(ylim))){
         ylim = c(-Phi_max, Phi_max)
@@ -80,6 +79,9 @@ plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA){
         abline(h = 0)
         for(i_Phi in 1:n_Phi){
             points(time, out_list[[i_Phi]][, s], type = "l", ylim = ylim, lwd = 1, col = i_Phi)
+        }
+        if(!any(is.na(legend))){
+            legend("topleft", legend = legend, col = 1:n_Phi, lwd = 1, bg = "white", cex = 0.7)
         }
     }
     par(mfrow = c(1, 1))
