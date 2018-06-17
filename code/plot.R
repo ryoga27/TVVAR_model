@@ -29,13 +29,13 @@ plot_Phi = function(Phi, time = 1:dim(Phi)[3], time_label = time, ylim = NA){
         axis(side = 1, at = time, labels = time_label, cex.axis = 1)
         grid()
         abline(h = 0)
-        points(time, out[, s], type = "l", ylim = ylim, lwd = 1)
+        points(time, out[, s], type = "l", ylim = ylim, lwd = 2)
     }
     par(mfrow = c(1, 1))
 }
 
 
-plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA, legend = NA){
+plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], time_label = time, ylim = NA, legend = NA){
     T = dim(Phi[[1]])[3]
     d = dim(Phi[[1]])[1]
 
@@ -74,14 +74,14 @@ plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA, legend = NA
         #         polygon(c(left[t0], right[t0], right[t0], left[t0]), c(2*ylim[1], 2*ylim[1], 2*ylim[2], 2*ylim[2]), col = "gray", border = NA)
         #     }
         # }
-        axis(side = 1, at = time, label = time, cex.axis = 1)
+        axis(side = 1, at = time, labels = time_label, cex.axis = 1)
         grid()
         abline(h = 0)
         for(i_Phi in 1:n_Phi){
-            points(time, out_list[[i_Phi]][, s], type = "l", ylim = ylim, lwd = 1, col = i_Phi)
+            points(time, out_list[[i_Phi]][, s], type = "l", ylim = ylim, lwd = 2, col = i_Phi)
         }
         if(!any(is.na(legend))){
-            legend("topleft", legend = legend, col = 1:n_Phi, lwd = 1, bg = "white", cex = 0.7)
+            legend("topleft", legend = legend, col = 1:n_Phi, lwd = 2, bg = "white", cex = 0.7)
         }
     }
     par(mfrow = c(1, 1))
