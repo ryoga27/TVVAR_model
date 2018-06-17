@@ -45,7 +45,6 @@ plot_multi_Phi = function(Phi, time = 1:dim(Phi[[1]])[3], ylim = NA){
     Phi_max = 0
 
     for(i_Phi in 1:n_Phi){
-        i_Phi = 2
         out = matrix(0, nrow = T, ncol = d*d)
         for(i in 1:d){
             for(j in 1:d){
