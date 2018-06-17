@@ -17,7 +17,7 @@ coordinate_descent_algorithm = function(
     y_mat = matrix(0, nrow = m, ncol = d)
     for(j in 1:d){
         for(t in 1:m){
-            y_mat[t, j]
+            y_mat[t, j] = y[j + d*(t-1)]
         }
     }
 
@@ -34,15 +34,14 @@ coordinate_descent_algorithm = function(
     n = nrow(x)
     k = ncol(x)
 
-
     nu = y_mean
     nu_list[[1]] = nu
 
     mu = matrix(0, nrow = n, ncol = 1)
     mu[1:(d*(T-p)), ] = rep(nu, m)
 
-    beta = rep(0, length = k)
-    beta_list[[1]] = beta
+    # beta = rep(0, length = k)
+    beta = solve(t(x)%*%x)%*%t(x)%*%(y - mu)
 
     obj = rep(0, iter_max)
 
@@ -67,6 +66,7 @@ coordinate_descent_algorithm = function(
         }
         if(display == TRUE){
             cat("\n")
+            cat("\t", "beta:", beta[1:5], "...", "\n")
         }
 
         beta_list[[s+1]] = beta
@@ -152,7 +152,7 @@ coordinate_descent_algorithm = function(
 # penalty = "scad"
 # result = coordinate_descent_algorithm(Y = psi, X = zeta, T = T, d = d, p = p, lambda = lambda, penalty = penalty, eps = 10^-6)
 # path_result = paste0("../results/", "sample_data", "_", penalty,"_", lambda, ".Rdata")
-# save(list = ls(), file=path_save)
+# save(list = ls(), file=path_result)
 # path_figrue = paste0("../figures/", "sample_data", "_", penalty,"_", lambda, ".pdf")
 # pdf(path_figrue, width = 15, height = 10)
 #     plot_Phi(make_Phi(y = y, p = 1, beta = result$coef))
