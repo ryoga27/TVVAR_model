@@ -80,7 +80,6 @@ make_Zt = function(y, t, p){
     out = matrix(0, nrow = d*p, ncol = 1)
     for(l in 1:p){
         out[1:d + d*(l-1), ] = make_yt(y, t-l)
-        s = s + 1
     }
     return(out)
 }
